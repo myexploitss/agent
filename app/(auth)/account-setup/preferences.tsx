@@ -1,9 +1,60 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { router } from 'expo-router';
 import { BackButton } from '@/components/BackButton';
-import CheckIcon from '@/assets/icons/check.svg';
+import { PreferenceOption } from '@/components/PreferenceOption';
+import { useState } from 'react';
+import { Button } from '@/components/Button';
 
 export default function PreferencesScreen() {
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+  const handleOptionPress = (title: string) => {
+    setSelectedOptions(prev => {
+      if (prev.includes(title)) {
+        return prev.filter(option => option !== title);
+      }
+      if (prev.length < 2) {
+        return [...prev, title];
+      }
+      return prev;
+    });
+  };
+
+  const options = [
+    {
+      title: 'Property Management',
+      image: require('@/assets/images/property-management.jpg')
+    },
+    {
+      title: 'Property for rent/lease',
+      image: require('@/assets/images/property-rent.jpg')
+    },
+    {
+      title: 'Property Listing',
+      image: require('@/assets/images/property-listing.jpg')
+    },
+    {
+      title: 'Selling Properties',
+      image: require('@/assets/images/selling-properties.jpg')
+    },
+    {
+      title: 'Real Estate Investment',
+      image: require('@/assets/images/property-management.jpg')
+    },
+    {
+      title: 'Property Development',
+      image: require('@/assets/images/property-rent.jpg')
+    },
+    {
+      title: 'Commercial Properties',
+      image: require('@/assets/images/property-listing.jpg')
+    },
+    {
+      title: 'Residential Properties',
+      image: require('@/assets/images/selling-properties.jpg')
+    }
+  ];
+
   return (
     <View className="flex-1 bg-background">
       {/* Background Image */}
@@ -14,176 +65,105 @@ export default function PreferencesScreen() {
       />
 
       {/* Header */}
-      <View className="flex-row justify-between items-center absolute top-12 left-6 right-6 z-10">
+      <View className="flex-row justify-between items-center absolute top-12 left-4 right-4 z-10">
         <BackButton />
-        <TouchableOpacity className='h-[50px] w-[100px] rounded-xl bg-primary items-center justify-center'>
+        <TouchableOpacity 
+          className='h-[50px] w-[100px] rounded-xl bg-primary items-center justify-center'
+          onPress={() => router.push('/(auth)/account-setup/role')}
+        >
           <Text className="text-white text-sm font-medium">Skip</Text>
         </TouchableOpacity>
       </View>
 
       <ScrollView 
-        className="flex-1 px-4" 
-        contentContainerStyle={{paddingTop: 144, paddingBottom: 100}}
+        className="flex-1 px-4 pt-36"
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
       >
         {/* Title Section */}
         <Text className="text-[28px] text-primary font-extrabold mb-2">
           What are you looking For ?
         </Text>
-        <Text className="text-primary text-primary-600 mb-6">
+        <Text className="text-primary text-xs text-primary-600 mb-6">
           Select one or two options
         </Text>
 
         {/* Options Grid */}
         <View className="flex-1">
           {/* Row 1 */}
-          <View className="flex-row gap-4 mb-4">
-            {/* Property Management */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/property-management.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Property Management</Text>
-            </TouchableOpacity>
-
-            {/* Property for rent/lease */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/property-rent.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Property for rent/lease</Text>
-            </TouchableOpacity>
+          <View className="flex-row mb-4">
+            <PreferenceOption
+              image={options[0].image}
+              title={options[0].title}
+              isSelected={selectedOptions.includes(options[0].title)}
+              onPress={() => handleOptionPress(options[0].title)}
+            />
+            <PreferenceOption
+              image={options[1].image}
+              title={options[1].title}
+              isSelected={selectedOptions.includes(options[1].title)}
+              onPress={() => handleOptionPress(options[1].title)}
+            />
           </View>
 
           {/* Row 2 */}
-          <View className="flex-row gap-4 mb-4">
-            {/* Property Listing */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/property-listing.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Property Listing</Text>
-            </TouchableOpacity>
-
-            {/* Selling Properties */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/selling-properties.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Selling Properties</Text>
-            </TouchableOpacity>
+          <View className="flex-row mb-4">
+            <PreferenceOption
+              image={options[2].image}
+              title={options[2].title}
+              isSelected={selectedOptions.includes(options[2].title)}
+              onPress={() => handleOptionPress(options[2].title)}
+            />
+            <PreferenceOption
+              image={options[3].image}
+              title={options[3].title}
+              isSelected={selectedOptions.includes(options[3].title)}
+              onPress={() => handleOptionPress(options[3].title)}
+            />
           </View>
 
-          {/* Row 3 - Repeated */}
-          <View className="flex-row gap-4 mb-4">
-            {/* Property Management */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/property-management.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Property Management</Text>
-            </TouchableOpacity>
-
-            {/* Property for rent/lease */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/property-rent.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Property for rent/lease</Text>
-            </TouchableOpacity>
+          {/* Row 3 */}
+          <View className="flex-row mb-4">
+            <PreferenceOption
+              image={options[4].image}
+              title={options[4].title}
+              isSelected={selectedOptions.includes(options[4].title)}
+              onPress={() => handleOptionPress(options[4].title)}
+            />
+            <PreferenceOption
+              image={options[5].image}
+              title={options[5].title}
+              isSelected={selectedOptions.includes(options[5].title)}
+              onPress={() => handleOptionPress(options[5].title)}
+            />
           </View>
 
-          {/* Row 4 - Repeated */}
-          <View className="flex-row gap-4 mb-4">
-            {/* Property Listing */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/property-listing.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Property Listing</Text>
-            </TouchableOpacity>
-
-            {/* Selling Properties */}
-            <TouchableOpacity className="flex-1 bg-white rounded-3xl p-3 border border-gray-100">
-              <View className="relative">
-                <Image 
-                  source={require('@/assets/images/selling-properties.jpg')}
-                  className="w-full h-[140px] rounded-2xl"
-                  resizeMode="cover"
-                />
-                <View className="absolute top-2 left-2 bg-white rounded-full p-2">
-                  <CheckIcon width={10} height={10} color="#4B5563" />
-                </View>
-              </View>
-              <Text className="text-xs font-medium text-black mt-2">Selling Properties</Text>
-            </TouchableOpacity>
+          {/* Row 4 */}
+          <View className="flex-row mb-4">
+            <PreferenceOption
+              image={options[6].image}
+              title={options[6].title}
+              isSelected={selectedOptions.includes(options[6].title)}
+              onPress={() => handleOptionPress(options[6].title)}
+            />
+            <PreferenceOption
+              image={options[7].image}
+              title={options[7].title}
+              isSelected={selectedOptions.includes(options[7].title)}
+              onPress={() => handleOptionPress(options[7].title)}
+            />
           </View>
         </View>
       </ScrollView>
 
-      {/* Blur Overlay */}
-      <View className="absolute bottom-0 left-0 right-0 h-40 bg-white/80 backdrop-blur-lg z-10" />
-
       {/* Next Button */}
-      <View className="px-4 pb-12 pt-4 bg-transparent absolute bottom-12 left-0 right-0 z-20">
-        <TouchableOpacity 
-          className="bg-[#1ABC9C] h-[56px] rounded-2xl items-center justify-center shadow-lg"
+      <Button 
+          text="Next"
+          variant="secondary"
+          position="absolute"
+          disabled={selectedOptions.length === 0 ? true : false}
           onPress={() => router.push('/(auth)/account-setup/role')}
-        >
-          <Text className="text-white font-semibold text-base">
-            Next
-          </Text>
-        </TouchableOpacity>
-      </View>
+        />
     </View>
   );
 } 

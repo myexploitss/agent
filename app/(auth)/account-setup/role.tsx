@@ -1,7 +1,9 @@
 import { View, Text, TouchableOpacity, Image, FlatList } from 'react-native';
 import { router } from 'expo-router';
 import { BackButton } from '@/components/BackButton';
+import { useState } from 'react';
 import CheckIcon from '@/assets/icons/check.svg';
+import { Button } from '@/components/Button';
 
 interface Role {
   id: string;
@@ -43,21 +45,34 @@ const roles: Role[] = [
 ];
 
 export default function RoleScreen() {
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+
+  const handleRolePress = (roleId: string) => {
+    setSelectedRole(prev => prev === roleId ? null : roleId);
+  };
+
   const renderItem = ({ item }: { item: Role }) => (
-    <TouchableOpacity className="items-center mb-8">
+    <TouchableOpacity 
+      className="items-center mb-8"
+      onPress={() => handleRolePress(item.id)}
+    >
       <View className="relative">
-        <View className="w-[80px] h-[80px] rounded-full bg-[#EEF2FF] items-center justify-center">
+        <View className={`w-[80px] h-[80px] rounded-full  bg-[#EEF2FF] items-center justify-center`}>
           <Image 
             source={item.icon}
             className="w-8 h-8"
             resizeMode="contain"
           />
         </View>
-        <View className="absolute -top-2 -right-2 bg-white rounded-full p-1.5 shadow-sm border border-primary">
-          <CheckIcon width={10} height={10} color="#4B5563" />
-        </View>
+        {selectedRole === item.id && (
+          <View className="absolute -top-2 -right-2 bg-white rounded-full p-1.5 shadow-sm border border-primary">
+            <CheckIcon width={10} height={10} color="#4B7BF5" />
+          </View>
+        )}
       </View>
-      <Text className="text-xs font-medium text-black mt-1">{item.title}</Text>
+      <Text className={`text-xs font-medium mt-1 ${selectedRole === item.id ? 'text-primary' : 'text-black'}`}>
+        {item.title}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -71,9 +86,12 @@ export default function RoleScreen() {
       />
 
       {/* Header */}
-      <View className="flex-row justify-between items-center absolute top-12 left-6 right-6 z-10">
+      <View className="flex-row justify-between items-center absolute top-12 left-4 right-4 z-10">
         <BackButton />
-        <TouchableOpacity className='h-[50px] w-[100px] rounded-xl bg-primary items-center justify-center'>
+        <TouchableOpacity 
+          className='h-[50px] w-[100px] rounded-xl bg-primary items-center justify-center'
+          onPress={() => router.push('/(auth)/account-setup/location')}
+        >
           <Text className="text-white text-sm font-medium">Skip</Text>
         </TouchableOpacity>
       </View>
@@ -96,7 +114,7 @@ export default function RoleScreen() {
           }}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-          marginTop:30,
+            marginTop: 30,
             paddingBottom: 10
           }}
         />
@@ -109,15 +127,15 @@ export default function RoleScreen() {
           <View className="w-1/3 h-full bg-primary rounded-full" />
         </View>
 
-        <TouchableOpacity 
-          className="bg-[#1ABC9C] h-[56px] rounded-2xl items-center justify-center shadow-lg"
-          onPress={() => router.push('/(auth)/account-setup/payment')}
-        >
-          <Text className="text-white font-semibold text-base">
-            Next
-          </Text>
-        </TouchableOpacity>
+       
       </View>
+      <Button  
+          text="Next"
+          variant="secondary"
+          position="absolute"
+          disabled={selectedRole === null ? true : false}
+          onPress={() => router.push('/(auth)/account-setup/payment')}
+        />
     </View>
   );
 } 
