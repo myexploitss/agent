@@ -1,21 +1,22 @@
 import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import { router } from 'expo-router';
-import { BackButton } from '@/components/BackButton';
-import { Button } from '@/components/Button';
+import { BackButton } from '@/app/components/BackButton';
+import { Button } from '@/app/components/Button';
+import React from 'react';
 
 export default function WelcomeScreen() {
   return (
     <View className="flex-1 bg-background">
       {/* Header */}
-      <View className="flex-row justify-between items-center absolute top-12 left-4 right-4 z-10">
+      <View className="flex-row justify-between items-center absolute top-[50px] left-4 right-4 z-10">
         <BackButton />
-        <TouchableOpacity className='h-[50px] w-[100px] rounded-xl bg-primary items-center justify-center' onPress={() => router.push('/(auth)/faq-support')}>
+        <TouchableOpacity className='h-[50px] w-[100px] rounded-xl bg-primary items-center justify-center' onPress={() => router.push('/(auth)/account-setup/location')}>
           <Text className="text-white text-sm font-medium">Skip</Text>
         </TouchableOpacity>
       </View>
 
       {/* Background Image Section */}
-      <View className="h-[400px] w-full">
+      <View className="h-[397px] w-full">
         <ImageBackground
           source={require('@/assets/images/smile.png')}
           className="flex-1"
@@ -25,7 +26,7 @@ export default function WelcomeScreen() {
 
       {/* Welcome Text - Centered */}
       <View className="items-center mt-8">
-        <Text className="text-xl text-primary font-extrabold mb-2">
+        <Text className="text-primary font-extrabold mb-2 text-2xl" >
           Welcome to Rans
         </Text>
         <Text className="text-primary text-xs text-center">
@@ -38,8 +39,8 @@ export default function WelcomeScreen() {
         text="Get Started"
         variant="secondary"
         position="absolute"
-        bottom={32}
-        onPress={() => router.push('/(auth)/account-setup/location')}
+        bottom={50}
+        onPress={() => router.push('/account-setup/location')}
       />
     </View>
   );
